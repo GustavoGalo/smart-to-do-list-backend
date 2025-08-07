@@ -83,7 +83,7 @@ describe('TodoService', () => {
       const mockTodo = { id: '1', title, isCompleted: false, createdAt: new Date() };
       mockPrismaService.todo.create.mockResolvedValue(mockTodo);
 
-      const result = await service.create(title);
+      const result = await service.create({ title });
 
       expect(result).toEqual(mockTodo);
       expect(mockPrismaService.todo.create).toHaveBeenCalledWith({ data: { title } });

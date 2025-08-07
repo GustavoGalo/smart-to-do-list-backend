@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ErrorMessages } from '../constants/error-messages';
 import { PrismaService } from '../prisma.service';
 import Groq from "groq-sdk";
+import { CreateTodoDto } from './dto/create-todo-dto';
+import { UpdateTodoDto } from './dto/update-todo-dto';
 
 @Injectable()
 export class TodoService {
@@ -11,16 +13,22 @@ export class TodoService {
     return await this.prisma.todo.findMany()
   }
 
-  async create(title: string) {
+  async create({ title }: CreateTodoDto) {
     return await this.prisma.todo.create({ data: { title } })
   }
 
-  async update(id: string, body: { title: string, isCompleted: boolean }) {
+  async update(id: string, body: UpdateTodoDto) {
     const todo = await this.prisma.todo.findUnique({ where: { id } })
 
-    if (!todo) throw new NotFoundException(ErrorMessages.TODO_NOT_FOUND)
+    if (!todo)
+      throw new NotFoundException(ErrorMessages.TODO_NOT_FOUND);
 
-    return await this.prisma.todo.update({ where: { id }, data: { ...body } })
+    const data = {
+      title: body.title ?? body.title,
+      isCompleted: body.isCompleted ?? body.isCompleted
+    }
+
+    return await this.prisma.todo.update({ where: { id }, data })
   }
 
   async delete(id: string) {
