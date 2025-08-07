@@ -104,6 +104,7 @@ npm run test:cov
 
 ## Estrutura do Projeto
 
+```
 ├── prisma/ # Configurações e migrações do Prisma
 ├── src/ # Código fonte da aplicação
 │ ├── constants/ # Constantes da aplicação
@@ -115,3 +116,4 @@ npm run test:cov
 │ ├── app.module.ts # Módulo principal da aplicação
 │ ├── main.ts # Ponto de entrada da aplicação
 │ └── prisma.service.ts # Serviço do Prisma
+```
