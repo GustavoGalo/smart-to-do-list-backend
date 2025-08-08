@@ -175,7 +175,7 @@ describe('TodoService', () => {
 
       expect(result).toEqual(mockResult);
       expect(mockPrismaService.todo.createMany).toHaveBeenCalledWith({
-        data: expectedTodos.map(title => ({ title }))
+        data: expectedTodos.map(title => ({ title, generatedByAI: true }))
       });
     });
   });

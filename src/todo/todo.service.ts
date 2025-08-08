@@ -78,6 +78,6 @@ export class TodoService {
       .filter(line => line.startsWith('- '))
       .map(line => line.slice(2).trim());
 
-    return this.prisma.todo.createMany({ data: todos.map(todo => ({ title: todo })) })
+    return await this.prisma.todo.createMany({ data: todos.map(todo => ({ title: todo, generatedByAI: true })) })
   }
 }
