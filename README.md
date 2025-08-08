@@ -20,7 +20,7 @@ Este é o backend para uma aplicação de lista de tarefas inteligente que utili
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/smart-to-do-list-backend.git
+git clone https://github.com/GustavoGalo/smart-to-do-list-backend.git
 cd smart-to-do-list-backend
 ```
 
@@ -117,3 +117,4 @@ npm run test:cov
 │ ├── main.ts # Ponto de entrada da aplicação
 │ └── prisma.service.ts # Serviço do Prisma
 ```
+
