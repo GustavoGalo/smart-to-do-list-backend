@@ -10,7 +10,18 @@ export class TodoService {
   constructor(private readonly prisma: PrismaService) {}
 
   async list() {
-    return await this.prisma.todo.findMany()
+    const todos = await this.prisma.todo.findMany()
+    const { _count: countTodos } = await this.prisma.todo.aggregate({ _count: true })
+    const { _count: countCompletedTodos } = await this.prisma.todo.aggregate({ _count: true, where: { isCompleted: true } })
+
+    return {
+      todos,
+      metadata: {
+        countTodos,
+        countCompletedTodos,
+        countPendingTodos: countTodos - countCompletedTodos
+      }
+    }
   }
 
   async create({ title }: CreateTodoDto) {
