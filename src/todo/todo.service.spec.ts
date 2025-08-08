@@ -37,7 +37,8 @@ describe('TodoService', () => {
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
-      createMany: jest.fn()
+      createMany: jest.fn(),
+      aggregate: jest.fn()
     }
   };
 
@@ -63,17 +64,31 @@ describe('TodoService', () => {
   });
 
   describe('list', () => {
-    it('should return all todos', async () => {
+    it('should return all todos with metadata', async () => {
       const mockTodos = [
         { id: '1', title: 'Todo 1', isCompleted: false, createdAt: new Date() },
         { id: '2', title: 'Todo 2', isCompleted: true, createdAt: new Date() }
       ];
+
       mockPrismaService.todo.findMany.mockResolvedValue(mockTodos);
+      mockPrismaService.todo.aggregate
+        .mockResolvedValueOnce({ _count: 2 })
+        .mockResolvedValueOnce({ _count: 1 });
 
       const result = await service.list();
 
-      expect(result).toEqual(mockTodos);
+      expect(result).toEqual({
+        todos: mockTodos,
+        metadata: {
+          countTodos: 2,
+          countCompletedTodos: 1,
+          countPendingTodos: 1
+        }
+      });
       expect(mockPrismaService.todo.findMany).toHaveBeenCalledTimes(1);
+      expect(mockPrismaService.todo.aggregate).toHaveBeenCalledTimes(2);
+      expect(mockPrismaService.todo.aggregate).toHaveBeenNthCalledWith(1, { _count: true });
+      expect(mockPrismaService.todo.aggregate).toHaveBeenNthCalledWith(2, { _count: true, where: { isCompleted: true } });
     });
   });
 

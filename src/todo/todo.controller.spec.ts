@@ -44,9 +44,18 @@ describe('TodoController', () => {
 
   describe('getTodos', () => {
     it('should call todoService.list method', async () => {
-      mockTodoService.list.mockResolvedValue([]);
-      await controller.getTodos();
+      const mockResult = {
+        todos: [],
+        metadata: {
+          countTodos: 0,
+          countCompletedTodos: 0,
+          countPendingTodos: 0
+        }
+      };
+      mockTodoService.list.mockResolvedValue(mockResult);
+      const result = await controller.getTodos();
       expect(todoService.list).toHaveBeenCalled();
+      expect(result).toEqual(mockResult);
     });
   });
 
